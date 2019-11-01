@@ -1,0 +1,15 @@
+apply plugin: 'codenarc'
+
+codenarc {
+    toolVersion = "1.3"
+}
+
+codenarcMain {
+    configFile = new File(project.projectDir, "config/codenarc/codenarc-main.xml")
+}
+
+codenarcTest {
+    configFile = new File(project.projectDir, "config/codenarc/codenarc-test.xml")
+}
+
+

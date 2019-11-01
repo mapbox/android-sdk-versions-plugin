@@ -1,0 +1,20 @@
+ext {
+
+    version = [
+            junit: '4.12',
+    ]
+
+    pluginVersion = [
+            checkstyle: '8.4',
+    ]
+
+    dependenciesList = [
+            // unit test
+            junit: "junit:junit:${version.junit}",
+
+    ]
+
+    pluginDependencies = [
+            checkstyle: "com.puppycrawl.tools:checkstyle:${pluginVersion.checkstyle}",
+    ]
+}

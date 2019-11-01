@@ -1,0 +1,23 @@
+{
+  "name": "@mapbox/android-sdk-versions-plugin",
+  "version": "0.1.0",
+  "description": "Android SDK Versions",
+  "keywords": [
+    "mapbox",
+    "android-sdk-versions-plugin",
+    "events"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:mapbox/android-sdk-versions-plugin.git"
+  },
+  "devDependencies": {
+    "@mapbox/cloudfriend": "^2.6.0"
+  },
+  "engines": {
+    "node": ">=6"
+  },
+  "dependencies": {
+    "@mapbox/cloudfriend": "^2.6.0"
+  }
+}

@@ -1,0 +1,105 @@
+version: 2
+
+workflows:
+  version: 2
+  default:
+    jobs:
+      - build
+      - release:
+          filters:
+            tags:
+              only: /(sdkver)-.*/
+
+jobs:
+  build:
+    working_directory: ~/code
+    docker:
+      - image: mbgl/android-ndk-r19:8e91a7ebab
+    environment:
+      JVM_OPTS: -Xmx3200m
+      BUILDTYPE: Debug
+      IS_LOCAL_DEVELOPMENT: false
+    steps:
+      - checkout
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "gradle/dependencies.gradle" }}
+      - run:
+          name: Download Dependencies
+          command: ./gradlew dependencies
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "gradle/dependencies.gradle" }}
+      - run:
+          name: Check code style
+          command: make checkstyle
+      - run:
+          name: Check codenarc code style
+          command: make codenarc
+      - run:
+          name: Run unit-test
+          command: make test
+      - run:
+          name: Build test plugin
+          command: ./gradlew assemble
+      - run:
+          name: Post code coverage report to Codecov.io
+          command: |
+            make test-coverage
+            pip install --user codecov && /root/.local/bin/codecov
+      - store_artifacts:
+          path: build/libs
+          destination: reports
+      - store_test_results:
+          path: app/build/test-results
+
+  # ------------------------------------------------------------------------------
+  release:
+    docker:
+      - image: mbgl/android-ndk-r19:8e91a7ebab
+    working_directory: ~/code
+    environment:
+      BUILDTYPE: Release
+      IS_LOCAL_DEVELOPMENT: false
+    steps:
+      - checkout
+      - run:
+          name: Generate Maven credentials
+          shell: /bin/bash -euo pipefail
+          command: |
+            aws s3 cp s3://mapbox/android/signing-credentials/secring.gpg secring.gpg
+            echo "NEXUS_USERNAME=$PUBLISH_NEXUS_USERNAME
+            NEXUS_PASSWORD=$PUBLISH_NEXUS_PASSWORD
+            signing.keyId=$SIGNING_KEYID
+            signing.password=$SIGNING_PASSWORD
+            signing.secretKeyRingFile=../secring.gpg" >> /gradle.properties
+      - run:
+          name: Update version name
+          command: |
+            if [[ $CIRCLE_TAG == sdkver-* ]]; then
+              sed -i -e "s/^VERSION_NAME=.*/VERSION_NAME=${CIRCLE_TAG:7}/" gradle.properties
+            fi
+      - run:
+          name: Build plugin
+          command: make release
+      - deploy:
+          name: Publish to Maven Central
+          command: |
+            if [[ $CIRCLE_BRANCH == master ]]; then
+              make publish;
+            else
+              echo "Skip, not a release branch"
+            fi
+      - store_artifacts:
+          path: build/libs
+          destination: reports
+      - restore_cache: # special step to restore the dependency cache
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: Setup Environment
+          command: npm install
+      - save_cache: # special step to save the dependency cache
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+
