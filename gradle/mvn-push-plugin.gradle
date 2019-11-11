@@ -50,7 +50,6 @@ def getRepositoryPassword() {
     return hasProperty('NEXUS_PASSWORD') ? NEXUS_PASSWORD : ""
 }
 
-
 afterEvaluate { project ->
     uploadArchives {
         repositories {
@@ -119,7 +118,6 @@ afterEvaluate { project ->
         classpath = project.sourceSets.main.output + project.sourceSets.main.compileClasspath
     }
 
-
     task groovyDocsJar(type: Jar, dependsOn: groovyDocs) {
         classifier = 'groovydoc'
         from groovyDocs.destinationDir
@@ -136,14 +134,9 @@ afterEvaluate { project ->
         from javaDocs.destinationDir
     }
 
-
     artifacts {
-
         archives generateSourcesJar
         archives javaDocsJar
         archives groovyDocsJar
     }
-
-
 }
-

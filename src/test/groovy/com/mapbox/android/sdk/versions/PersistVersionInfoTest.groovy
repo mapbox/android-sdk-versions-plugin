@@ -40,7 +40,6 @@ class PersistVersionInfoTest {
         assertTrue(PersistSDKVersionInfo.validateVersion("99999999999999999999999.999999999999999999.99999999999999999"))
         assertTrue(PersistSDKVersionInfo.validateVersion("1.0.0-0A.is.legal"))
 
-
         // Invalid Semantic Versions
         assertFalse(PersistSDKVersionInfo.validateVersion("1"))
         assertFalse(PersistSDKVersionInfo.validateVersion("1.2"))
@@ -83,4 +82,5 @@ class PersistVersionInfoTest {
         assertFalse(PersistSDKVersionInfo.validateVersion("9.8.7-whatever+meta+meta"))
         assertFalse(PersistSDKVersionInfo.validateVersion("SNAPSHOT.12.09.1--------------------------------..12"))
     }
+
 }

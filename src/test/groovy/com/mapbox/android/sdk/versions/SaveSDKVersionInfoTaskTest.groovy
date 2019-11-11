@@ -21,13 +21,11 @@ class SaveSDKVersionInfoTaskTest {
 
     @Before
     void setUp() {
-
         File assetsDirectory = temporaryFolder.newFolder()
         File versionFile = new File(assetsDirectory, FILE_NAME)
 
         project = ProjectBuilder.builder().withProjectDir(new File(BASE_DIR)).build()
         saveSDKVersionInfoTask = project.getTasks().create("saveSDKVersions", SaveSDKVersionInfoTask.class)
-
         saveSDKVersionInfoTask.outputDir = assetsDirectory
         saveSDKVersionInfoTask.outputFile = versionFile
         saveSDKVersionInfoTask.sdkVersion = SDK_VERSION
@@ -35,9 +33,7 @@ class SaveSDKVersionInfoTaskTest {
         if (assetsDirectory.exists()) {
             assetsDirectory.deleteDir()
         }
-
     }
-
 
     @Test
     public void testInitOutputDirectory() {
@@ -59,7 +55,6 @@ class SaveSDKVersionInfoTaskTest {
 
     @Test
     public void testAction() {
-
         saveSDKVersionInfoTask.action()
 
         assertTrue(saveSDKVersionInfoTask.outputFile.exists())
@@ -72,8 +67,6 @@ class SaveSDKVersionInfoTaskTest {
         reader.close()
 
         assertTrue(line == SDK_VERSION)
-
     }
-
 
 }

@@ -18,34 +18,26 @@ class SDKVersionCleanUpTaskTest {
     private Project project
     private SDKVersionCleanUpTask sdkVersionCleanUpTask
 
-
     @Before
     void setUp() {
         def assetsDirectory = temporaryFolder.newFolder()
 
         project = ProjectBuilder.builder().withProjectDir(new File(BASE_DIR)).build()
         sdkVersionCleanUpTask = project.getTasks().create("cleanUpSDKVersions", SDKVersionCleanUpTask.class);
-
         sdkVersionCleanUpTask.outputDir = assetsDirectory
 
         if (assetsDirectory.exists()) {
             assetsDirectory.deleteDir()
         }
-
         sdkVersionCleanUpTask.outputDir.mkdirs()
-
     }
 
     @Test
     public void testCleanUp() {
-
         assertTrue(sdkVersionCleanUpTask.outputDir.exists())
         assertTrue(sdkVersionCleanUpTask.outputDir.isDirectory())
-
         sdkVersionCleanUpTask.action()
-
         assertFalse(sdkVersionCleanUpTask.outputDir.exists())
-
     }
 
 }

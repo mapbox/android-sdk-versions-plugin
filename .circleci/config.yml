@@ -41,7 +41,7 @@ jobs:
           command: make test
       - run:
           name: Build test plugin
-          command: ./gradlew assemble
+          command: make release
       - run:
           name: Post code coverage report to Codecov.io
           command: |

@@ -15,32 +15,28 @@ class SaveSDKVersionInfoTask extends DefaultTask {
      * Output directory set to this task.
      */
     @OutputDirectory
-    public File outputDir
+    File outputDir
 
     /**
      * Output file set to this task.
      */
     @OutputFile
-    public File outputFile
-
+    File outputFile
 
     /**
      * SDK version set to this task.
      */
-    public String sdkVersion
-
+    String sdkVersion
 
     @TaskAction
     @VisibleForTesting
     void action() {
-
         initOutputDirectory()
         initOutputFile()
 
         def fileWriter = new FileWriter(outputFile)
         fileWriter.println(sdkVersion)
         fileWriter.close()
-
     }
 
     /**
@@ -48,7 +44,6 @@ class SaveSDKVersionInfoTask extends DefaultTask {
      */
     @VisibleForTesting
     protected void initOutputDirectory() {
-
         if (!outputDir.exists() || !outputDir.isDirectory()) {
             outputDir.mkdirs()
         }
@@ -59,7 +54,6 @@ class SaveSDKVersionInfoTask extends DefaultTask {
      */
     @VisibleForTesting
     protected void initOutputFile() {
-
         if (!outputDir.exists() || !outputDir.isDirectory()) {
             throw new IllegalStateException("Can not create a file in non existent directory.")
         }
@@ -69,8 +63,6 @@ class SaveSDKVersionInfoTask extends DefaultTask {
         }
 
         outputFile.createNewFile()
-
     }
-
 
 }

@@ -14,8 +14,7 @@ import java.util.regex.Pattern
  */
 class PersistSDKVersionInfo implements Plugin<Project> {
 
-    public static final String LOG_TAG = "PersistSDKVersionInfo"
-    public static final String SDK_VERSIONS_DIR = "/sdk_versions"
+    private static final String SDK_VERSIONS_DIR = "/sdk_versions"
     private static final String SEM_VER_REGEX = "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]" +
             "\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))" +
             "?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?\$"
@@ -27,48 +26,46 @@ class PersistSDKVersionInfo implements Plugin<Project> {
         def saveSDKVersionTask = project.tasks.create("saveSDKVersion", SaveSDKVersionInfoTask)
         def assetsDirectory = new File(project.projectDir,
                 ASSETS_DIR)
-
         def sdkVersionsDir = new File(assetsDirectory, SDK_VERSIONS_DIR)
+
         saveSDKVersionTask.outputDir = sdkVersionsDir
 
         project.afterEvaluate {
-            project.android.libraryVariants.all {
-                variant ->
+            project.android.libraryVariants.all { variant ->
 
-                    def outputFile = new File(sdkVersionsDir, variant.applicationId)
-                    saveSDKVersionTask.outputFile = outputFile
-                    saveSDKVersionTask.sdkVersion = project.version
+                def outputFile = new File(sdkVersionsDir, variant.applicationId)
+                saveSDKVersionTask.outputFile = outputFile
+                saveSDKVersionTask.sdkVersion = project.version
 
-                    if (!validateVersion(saveSDKVersionTask.sdkVersion)) {
+                if (!validateVersion(saveSDKVersionTask.sdkVersion)) {
 
-                        throw new IllegalStateException("Version $saveSDKVersionTask.sdkVersion invalid" +
-                                " for $project.name .Should match the standard https://semver.org")
+                    throw new IllegalStateException("Version $saveSDKVersionTask.sdkVersion invalid" +
+                            " for $project.name .Should match the standard https://semver.org")
 
-                    }
+                }
 
-                    if (variant.respondsTo("registerGeneratedResFolders")) {
-                        saveSDKVersionTask.ext.generatedResFolders = project
-                                .files(sdkVersionsDir)
-                                .builtBy(saveSDKVersionTask)
+                if (variant.respondsTo("registerGeneratedResFolders")) {
+                    saveSDKVersionTask.ext.generatedResFolders = project
+                            .files(sdkVersionsDir)
+                            .builtBy(saveSDKVersionTask)
 
-                        variant.registerGeneratedResFolders(saveSDKVersionTask.generatedResFolders)
+                    variant.registerGeneratedResFolders(saveSDKVersionTask.generatedResFolders)
 
-                        if (variant.hasProperty("mergeResourcesProvider")) {
-                            variant.mergeResourcesProvider.configure { dependsOn(saveSDKVersionTask) }
-                        } else {
-                            //noinspection GrDeprecatedAPIUsage
-                            variant.mergeResources.dependsOn(saveSDKVersionTask)
-                        }
+                    if (variant.hasProperty("mergeResourcesProvider")) {
+                        variant.mergeResourcesProvider.configure { dependsOn(saveSDKVersionTask) }
                     } else {
                         //noinspection GrDeprecatedAPIUsage
-                        variant.registerResGeneratingTask(saveSDKVersionTask, sdkVersionsDir)
+                        variant.mergeResources.dependsOn(saveSDKVersionTask)
                     }
+                } else {
+                    //noinspection GrDeprecatedAPIUsage
+                    variant.registerResGeneratingTask(saveSDKVersionTask, sdkVersionsDir)
+                }
             }
         }
 
         def cleanupTask = project.tasks.create("cleanSDKVersions", SDKVersionCleanUpTask)
         cleanupTask.outputDir = sdkVersionsDir
-
         project.tasks.findByName("clean").dependsOn(cleanupTask)
     }
 
@@ -80,7 +77,6 @@ class PersistSDKVersionInfo implements Plugin<Project> {
      */
     @VisibleForTesting
     static boolean validateVersion(String version) {
-
         return Pattern.matches(SEM_VER_REGEX, version as CharSequence)
     }
 }

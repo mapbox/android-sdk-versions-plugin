@@ -10,11 +10,12 @@ ext {
 
     dependenciesList = [
             // unit test
-            junit: "junit:junit:${version.junit}",
+            junit: "junit:junit:${version.junit}"
 
     ]
 
     pluginDependencies = [
-            checkstyle: "com.puppycrawl.tools:checkstyle:${pluginVersion.checkstyle}",
+            checkstyle: "com.puppycrawl.tools:checkstyle:${pluginVersion.checkstyle}"
     ]
+
 }

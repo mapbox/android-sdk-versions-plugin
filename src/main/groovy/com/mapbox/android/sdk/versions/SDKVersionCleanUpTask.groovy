@@ -17,11 +17,9 @@ class SDKVersionCleanUpTask extends DefaultTask {
 
     @TaskAction
     void action() {
-
         if (outputDir != null && outputDir.exists()) {
-
             outputDir.deleteDir()
-
         }
     }
+
 }
