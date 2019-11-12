@@ -1,0 +1,46 @@
+
+plugins {
+   id 'groovy'
+   id 'jacoco'
+}
+
+group GROUP
+version VERSION_NAME
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    google()
+    jcenter()
+}
+
+jacoco {
+    toolVersion = "0.8.4"
+    reportsDir = file("$buildDir/reports/jacoco")
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        csv.enabled false
+        html.enabled true
+    }
+}
+
+dependencies {
+    apply from: "${rootDir}/gradle/dependencies.gradle"
+
+    testImplementation dependenciesList.junit
+    implementation gradleApi()
+}
+
+apply from: "${rootDir}/gradle/mvn-push-plugin.gradle"
+apply from: "${rootDir}/gradle/checkstyle.gradle"
+apply from: "${rootDir}/gradle/codenarc.gradle"
+
+afterEvaluate {
+    tasks.findByName('check').dependsOn('checkstyle')
+}
+
+// TODO Add code coverage tool based on necessity.
