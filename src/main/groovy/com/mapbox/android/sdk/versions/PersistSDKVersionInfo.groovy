@@ -7,7 +7,7 @@ import org.gradle.internal.impldep.com.google.common.annotations.VisibleForTesti
 import java.util.regex.Pattern
 
 /**
- * This plugin class persists the SDK version into a file named after the applicationId in assets folder.
+ * This plugin class persists the SDK version information into a file named after the applicationId in assets folder.
  * For every library variant in the project, this plugin reacts to resources generation
  * part of build process and executes {@link SaveSDKVersionInfoTask}
  *
@@ -24,11 +24,10 @@ class PersistSDKVersionInfo implements Plugin<Project> {
     void apply(Project project) {
 
         def saveSDKVersionTask = project.tasks.create("saveSDKVersion", SaveSDKVersionInfoTask)
-        def assetsDirectory = new File(project.projectDir,
-                ASSETS_DIR)
+        def assetsDirectory = new File(project.projectDir, ASSETS_DIR)
         def sdkVersionsDir = new File(assetsDirectory, SDK_VERSIONS_DIR)
-
         saveSDKVersionTask.outputDir = sdkVersionsDir
+        saveSDKVersionTask.sdkName = project.name
 
         project.afterEvaluate {
             project.android.libraryVariants.all { variant ->
@@ -36,21 +35,18 @@ class PersistSDKVersionInfo implements Plugin<Project> {
                 def outputFile = new File(sdkVersionsDir, variant.applicationId)
                 saveSDKVersionTask.outputFile = outputFile
                 saveSDKVersionTask.sdkVersion = project.version
+                saveSDKVersionTask.sdkVersionCode = variant.generateBuildConfig.versionCode
 
                 if (!validateVersion(saveSDKVersionTask.sdkVersion)) {
-
                     throw new IllegalStateException("Version $saveSDKVersionTask.sdkVersion invalid" +
                             " for $project.name .Should match the standard https://semver.org")
-
                 }
 
                 if (variant.respondsTo("registerGeneratedResFolders")) {
                     saveSDKVersionTask.ext.generatedResFolders = project
                             .files(sdkVersionsDir)
                             .builtBy(saveSDKVersionTask)
-
                     variant.registerGeneratedResFolders(saveSDKVersionTask.generatedResFolders)
-
                     if (variant.hasProperty("mergeResourcesProvider")) {
                         variant.mergeResourcesProvider.configure { dependsOn(saveSDKVersionTask) }
                     } else {

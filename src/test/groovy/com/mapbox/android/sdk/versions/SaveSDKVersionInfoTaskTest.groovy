@@ -16,19 +16,23 @@ class SaveSDKVersionInfoTaskTest {
     private static final BASE_DIR = "src/main/assets"
     private Project project
     private SaveSDKVersionInfoTask saveSDKVersionInfoTask
-    private static final def SDK_VERSION = "1.0"
+    private static final def SDK_VERSION = "1.0.0"
     private static final String FILE_NAME = "testVersion"
+    private static final String PROJECT_NAME = "test"
+    private static final int VERSION_CODE = 1
 
     @Before
     void setUp() {
         File assetsDirectory = temporaryFolder.newFolder()
         File versionFile = new File(assetsDirectory, FILE_NAME)
 
-        project = ProjectBuilder.builder().withProjectDir(new File(BASE_DIR)).build()
+        project = ProjectBuilder.builder().withName(PROJECT_NAME).withProjectDir(new File(BASE_DIR)).build()
         saveSDKVersionInfoTask = project.getTasks().create("saveSDKVersions", SaveSDKVersionInfoTask.class)
         saveSDKVersionInfoTask.outputDir = assetsDirectory
         saveSDKVersionInfoTask.outputFile = versionFile
         saveSDKVersionInfoTask.sdkVersion = SDK_VERSION
+        saveSDKVersionInfoTask.sdkName = project.name
+        saveSDKVersionInfoTask.sdkVersionCode = VERSION_CODE
 
         if (assetsDirectory.exists()) {
             assetsDirectory.deleteDir()
@@ -63,10 +67,12 @@ class SaveSDKVersionInfoTaskTest {
         assertNotEquals(saveSDKVersionInfoTask.outputFile.length(), 0)
 
         FileReader reader = new FileReader(saveSDKVersionInfoTask.outputFile)
-        String line = reader.readLine()
+        String firstLine = reader.readLine()
+        String secondLine = reader.readLine()
         reader.close()
 
-        assertTrue(line == SDK_VERSION)
+        assertEquals(firstLine, String.format(Locale.US, SaveSDKVersionInfoTask.FIRST_LINE_FORMAT, PROJECT_NAME, SDK_VERSION))
+        assertEquals(secondLine, String.format(Locale.US, SaveSDKVersionInfoTask.SECOND_LINE_FORMAT, VERSION_CODE))
     }
 
 }

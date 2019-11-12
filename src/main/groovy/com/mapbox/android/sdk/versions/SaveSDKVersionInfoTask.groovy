@@ -7,9 +7,12 @@ import org.gradle.api.tasks.TaskAction
 import org.gradle.internal.impldep.com.google.common.annotations.VisibleForTesting
 
 /**
- * Task to create a file with specified name and write specified SDK version into it.
+ * Task to create a file with specified name and write specified SDK Version information into it.
  */
 class SaveSDKVersionInfoTask extends DefaultTask {
+
+    static final String FIRST_LINE_FORMAT = "%s/%s"
+    static final String SECOND_LINE_FORMAT = "v%s"
 
     /**
      * Output directory set to this task.
@@ -28,6 +31,16 @@ class SaveSDKVersionInfoTask extends DefaultTask {
      */
     String sdkVersion
 
+    /**
+     * SDK name set to this task.
+     */
+    String sdkName
+
+    /**
+     * SDK version code set to this task.
+     */
+    Integer sdkVersionCode
+
     @TaskAction
     @VisibleForTesting
     void action() {
@@ -35,7 +48,8 @@ class SaveSDKVersionInfoTask extends DefaultTask {
         initOutputFile()
 
         def fileWriter = new FileWriter(outputFile)
-        fileWriter.println(sdkVersion)
+        fileWriter.println(String.format(Locale.US, FIRST_LINE_FORMAT, sdkName, sdkVersion))
+        fileWriter.println(String.format(Locale.US, SECOND_LINE_FORMAT, sdkVersionCode != null ? sdkVersionCode : ""))
         fileWriter.close()
     }
 
