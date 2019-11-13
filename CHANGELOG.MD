@@ -4,3 +4,4 @@
  # Create a plugin that validates and persists Mapbox SDK version information during compilation for further access at run time.
  - Validate and Persist SDK versions during compilation for access at run time [#1](https://github.com/mapbox/android-sdk-versions-plugin/pull/1)
  - Persist more info [#2](https://github.com/mapbox/android-sdk-versions-plugin/pull/2)
+ - Add missing publish step for tag in config.yml [#5] (https://github.com/mapbox/android-sdk-versions-plugin/pull/5)
