@@ -57,6 +57,11 @@ release yet, you can use a -SNAPSHOT release of the current development version,
 
 ```$xslt
 
+    repositories {
+        mavenCentral()
+        maven { url "http://oss.sonatype.org/content/repositories/snapshots/" }
+    }
+
   dependencies {
     // ...
         // Add this line:
