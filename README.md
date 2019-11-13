@@ -7,7 +7,11 @@ This plugin persists Mapbox android SDK version information(for every library mo
 at compile time for further access at run time. This plugin also validates the version 
 to be compliant with https://semver.org/ .
 The persisted file is named after applicationId(for e.g. com.mapbox.andorid.core) and the file content
- is library(module) version.
+ is in the following format.
+```$xslt
+SDK Module Name/Version
+Version Code
+```
 
 This plugin is inspired from https://github.com/google/play-services-plugins/tree/master/oss-licenses-plugin
 
