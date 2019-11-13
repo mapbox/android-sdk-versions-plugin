@@ -72,7 +72,7 @@ jobs:
             NEXUS_PASSWORD=$PUBLISH_NEXUS_PASSWORD
             signing.keyId=$SIGNING_KEYID
             signing.password=$SIGNING_PASSWORD
-            signing.secretKeyRingFile=../secring.gpg" >> /gradle.properties
+            signing.secretKeyRingFile=./secring.gpg" >> gradle.properties
       - run:
           name: Update version name
           command: |
