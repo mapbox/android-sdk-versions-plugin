@@ -87,6 +87,8 @@ jobs:
           command: |
             if [[ $CIRCLE_BRANCH == master ]]; then
               make publish;
+            elif [[ $CIRCLE_TAG == sdkver-* ]]; then
+              make publish;
             else
               echo "Skip, not a release branch"
             fi
