@@ -108,8 +108,10 @@ afterEvaluate { project ->
     }
 
     task generateSourcesJar(type: Jar) {
-        def sources = project.sourceSets.main.allJava
-
+        classifier = 'sources'
+        def sources = project.sourceSets.main.collect{
+            it.allGroovy + it.allJava
+        }
         from sources
     }
 
