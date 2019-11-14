@@ -1,5 +1,7 @@
  # Changelog for Android SDK Versions Plugin
 
+ ## V0.1.3
+ - Fix generateSources artifact [#11] (https://github.com/mapbox/android-sdk-versions-plugin/pull/11)
  ## V0.1.2
  - Add Empty Java class [#9] (https://github.com/mapbox/android-sdk-versions-plugin/pull/9)
  ## V0.1.1
