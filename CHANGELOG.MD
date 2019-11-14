@@ -1,5 +1,7 @@
  # Changelog for Android SDK Versions Plugin
 
+ ## V0.1.2
+ - Add Empty Java class [#9] (https://github.com/mapbox/android-sdk-versions-plugin/pull/9)
  ## V0.1.1
  - Add POM packaging and bump version to 0.1.1 [#7] (https://github.com/mapbox/android-sdk-versions-plugin/pull/7) 
  ## V0.1.0
