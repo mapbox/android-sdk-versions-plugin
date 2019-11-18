@@ -3,11 +3,11 @@
 # Persist Mapbox SDK Versions
 
 ### About `android-sdk-versions-plugin`
-This plugin persists Mapbox android SDK version information(for every library module) in a file 
+This plugin persists Mapbox android SDK version information in a file 
 at compile time for further access at run time. This plugin also validates the version 
 to be compliant with https://semver.org/ .
-The persisted file is named after applicationId(for e.g. com.mapbox.andorid.core) and the file content
- is in the following format.
+This file is persisted in assets/sdk-versions folder. The persisted file is named after 
+applicationId(for e.g. com.mapbox.andorid.core) and the file contents are in the following format. 
 ```$xslt
 SDK Module Name/Version
 Version Code
@@ -15,8 +15,9 @@ Version Code
 
 This plugin is inspired from https://github.com/google/play-services-plugins/tree/master/oss-licenses-plugin
 
-All android SDK library modules at Mapbox should apply this plugin to facilitate the Telemetry SDK 
-access all Mapbox SDK versions at run time.
+All Mapbox android SDK modules that incorporate the Telemetry SDK and meant to be released 
+as libraries(artifacts) should apply this plugin to facilitate the Telemetry SDK access 
+all Mapbox library versions at run time.
 
 ### Add the Gradle plugin 
 In your root-level build.gradle, make sure you are using the Maven Central Repository and 
