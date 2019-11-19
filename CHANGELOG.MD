@@ -1,5 +1,7 @@
  # Changelog for Android SDK Versions Plugin
 
+ ## V1.0.0
+ - Minor fixes for first stable release [#13] (https://github.com/mapbox/android-sdk-versions-plugin/pull/13)
  ## V0.1.3
  - Fix generateSources artifact [#11] (https://github.com/mapbox/android-sdk-versions-plugin/pull/11)
  ## V0.1.2
