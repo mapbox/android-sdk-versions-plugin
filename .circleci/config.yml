@@ -51,7 +51,7 @@ jobs:
           path: build/libs
           destination: reports
       - store_test_results:
-          path: app/build/test-results
+          path: build/test-results
 
   # ------------------------------------------------------------------------------
   release:
