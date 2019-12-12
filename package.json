@@ -1,6 +1,6 @@
 {
   "name": "@mapbox/android-sdk-versions-plugin",
-  "version": "0.1.0",
+  "version": "1.0.2",
   "description": "Android SDK Versions",
   "keywords": [
     "mapbox",
@@ -15,7 +15,7 @@
     "@mapbox/cloudfriend": "^2.8.2"
   },
   "engines": {
-    "node": ">=6"
+    "node": ">=10"
   },
   "dependencies": {}
 }
