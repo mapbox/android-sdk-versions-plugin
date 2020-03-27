@@ -72,3 +72,6 @@ release yet, you can use a -SNAPSHOT release of the current development version,
 
 ```
 
+# Note: 
+A new folder ```sdk_versions``` with a new file will be generated inside assets folder if built locally. This is a build generated folder and can be safely added to git ignore if not required to be seen inside the remote repository.
+
