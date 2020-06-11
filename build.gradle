@@ -1,7 +1,6 @@
-
 plugins {
-   id 'groovy'
-   id 'jacoco'
+    id 'groovy'
+    id 'jacoco'
 }
 
 group GROUP
