@@ -35,7 +35,7 @@ class PersistSDKVersionInfo implements Plugin<Project> {
                 def outputFile = new File(sdkVersionsDir, variant.applicationId)
                 saveSDKVersionTask.outputFile = outputFile
                 saveSDKVersionTask.sdkVersion = project.version
-                saveSDKVersionTask.sdkVersionCode = variant.generateBuildConfigProvider.get().versionCode
+                saveSDKVersionTask.sdkVersionCode = variant.generateBuildConfigProvider.get().versionCode.get()
 
                 if (!validateVersion(saveSDKVersionTask.sdkVersion)) {
                     throw new IllegalStateException("Version $saveSDKVersionTask.sdkVersion invalid" +
