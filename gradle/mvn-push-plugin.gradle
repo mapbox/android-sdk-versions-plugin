@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-apply plugin: 'maven'
+apply plugin: 'maven-publish'
 apply plugin: 'signing'
+apply plugin: 'java'
 
 def isReleaseBuild() {
     return !VERSION_NAME.contains("SNAPSHOT")
@@ -50,96 +51,82 @@ def getRepositoryPassword() {
     return hasProperty('NEXUS_PASSWORD') ? NEXUS_PASSWORD : ""
 }
 
+group = GROUP
+version = VERSION_NAME
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+task groovyDocs(type: Groovydoc) {
+    def sources = project.sourceSets.main.allGroovy
+    source = sources
+    classpath = project.sourceSets.main.output + project.sourceSets.main.compileClasspath
+}
+
+task groovyDocsJar(type: Jar, dependsOn: groovyDocs) {
+    archiveClassifier = 'groovydoc'
+    from groovyDocs.destinationDir
+}
+
 afterEvaluate { project ->
-    uploadArchives {
-        repositories {
-            mavenDeployer {
-                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-                pom.groupId = GROUP
-                pom.artifactId = POM_ARTIFACT_ID
-                pom.version = VERSION_NAME
-
-                if (isLocalBuild()) {
-                    repository(url: obtainMavenLocalUrl())
-                } else {
-                    repository(url: getReleaseRepositoryUrl()) {
-                        authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
-                    }
-                    snapshotRepository(url: getSnapshotRepositoryUrl()) {
-                        authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
-                    }
-                }
-
-                pom.project {
-                    name POM_NAME
-                    packaging POM_PACKAGING
-                    description POM_DESCRIPTION
-                    url POM_URL
-
-                    scm {
-                        url POM_SCM_URL
-                        connection POM_SCM_CONNECTION
-                        developerConnection POM_SCM_DEV_CONNECTION
-                    }
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from components.java
+                artifact(groovyDocsJar)
+                pom {
+                    packaging = POM_PACKAGING
+                    description = POM_DESCRIPTION
+                    url = POM_URL
+                    artifactId = POM_ARTIFACT_ID
 
                     licenses {
                         license {
-                            name POM_LICENCE_NAME
-                            url POM_LICENCE_URL
-                            distribution POM_LICENCE_DIST
+                            name = POM_LICENCE_NAME
+                            url = POM_LICENCE_URL
+                            distribution = POM_LICENCE_DIST
                         }
                     }
-
                     developers {
                         developer {
-                            id POM_DEVELOPER_ID
-                            name POM_DEVELOPER_NAME
+                            id = POM_DEVELOPER_ID
+                            name = POM_DEVELOPER_NAME
                         }
                     }
+                    scm {
+                        url = POM_SCM_URL
+                        connection = POM_SCM_CONNECTION
+                        developerConnection = POM_SCM_DEV_CONNECTION
+                    }
+                }
+            }
+        }
+        repositories {
+            maven {
+                // change URLs to point to your repos, e.g. http://my.org/repo
+                def releasesRepoUrl = getReleaseRepositoryUrl()
+                def snapshotsRepoUrl = getSnapshotRepositoryUrl()
+                def localUrl = obtainMavenLocalUrl()
+                url = isLocalBuild() ? localUrl : isReleaseBuild() ? releasesRepoUrl : snapshotsRepoUrl
+                credentials {
+                    username = isLocalBuild() ? "" : getRepositoryUsername()
+                    password = isLocalBuild() ? "" : getRepositoryPassword()
                 }
             }
         }
     }
 
     signing {
-        required { isReleaseBuild() && gradle.taskGraph.hasTask("uploadArchives") }
-        sign configurations.archives
+        required { isReleaseBuild() && gradle.taskGraph.hasTask("publish") }
+        sign publishing.publications.mavenJava
     }
 
-    task generateSourcesJar(type: Jar) {
-        classifier = 'sources'
-        def sources = project.sourceSets.main.collect{
-            it.allGroovy + it.allJava
+    javadoc {
+        if (JavaVersion.current().isJava9Compatible()) {
+            options.addBooleanOption('html5', true)
         }
-        from sources
-    }
-
-    task groovyDocs(type: Groovydoc) {
-        def sources = project.sourceSets.main.allGroovy
-        source = sources
-        classpath = project.sourceSets.main.output + project.sourceSets.main.compileClasspath
-    }
-
-    task groovyDocsJar(type: Jar, dependsOn: groovyDocs) {
-        classifier = 'groovydoc'
-        from groovyDocs.destinationDir
-    }
-
-    task javaDocs(type: Javadoc) {
-        def sources = project.sourceSets.main.allJava
-        source = sources
-        classpath = project.sourceSets.main.output + project.sourceSets.main.compileClasspath
-    }
-
-    task javaDocsJar(type: Jar, dependsOn: javaDocs) {
-        classifier = 'javadoc'
-        from javaDocs.destinationDir
-    }
-
-    artifacts {
-        archives generateSourcesJar
-        archives javaDocsJar
-        archives groovyDocsJar
     }
 }
+

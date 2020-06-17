@@ -21,8 +21,8 @@ groovydoc:
 	./gradlew groovydoc
 
 publish:
-	export IS_LOCAL_DEVELOPMENT=false; ./gradlew uploadArchives
+	export IS_LOCAL_DEVELOPMENT=false; ./gradlew publish
 
 publish-local:
 	# This publishes to ~/.m2/repository/com/mapbox/mapboxsdk
-	export IS_LOCAL_DEVELOPMENT=true; ./gradlew uploadArchives
+	export IS_LOCAL_DEVELOPMENT=true; ./gradlew publishToMavenLocal
