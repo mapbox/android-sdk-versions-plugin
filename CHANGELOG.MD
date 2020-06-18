@@ -1,5 +1,6 @@
  # Changelog for Android SDK Versions Plugin
-
+## V1.1.0
+ - Update gradle version to the latest.  [#23] (https://github.com/mapbox/android-sdk-versions-plugin/pull/23)
 ## V1.0.1
  - Add repo license file [#16] (https://github.com/mapbox/android-sdk-versions-plugin/pull/16)
  ## V1.0.0
