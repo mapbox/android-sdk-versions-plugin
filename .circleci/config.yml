@@ -83,12 +83,13 @@ jobs:
           name: Build plugin
           command: make release
       - deploy:
-          name: Publish to Maven Central
+          name: Publish to Maven Central and Mapbox SDK registry
           command: |
             if [[ $CIRCLE_BRANCH == master ]]; then
               make publish;
             elif [[ $CIRCLE_TAG == sdkver-* ]]; then
               make publish;
+              make publish-sdk-registry;
             else
               echo "Skip, not a release branch"
             fi

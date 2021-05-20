@@ -1,0 +1,51 @@
+apply plugin: 'maven-publish'
+apply plugin: 'com.mapbox.sdkRegistry'
+apply from: file('./gradle/artifact-settings.gradle')
+
+version = project.ext.versionName
+group = project.ext.mapboxArtifactGroupId
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = project.ext.mapboxArtifactId
+            pom {
+                name = POM_NAME
+                packaging = POM_PACKAGING
+                description = POM_DESCRIPTION
+                url = POM_URL
+                groupId = this.group
+                version = this.version
+
+                licenses {
+                    license {
+                        name = POM_LICENCE_NAME
+                        url = POM_LICENCE_URL
+                        distribution = POM_LICENCE_DIST
+                    }
+                }
+                developers {
+                    developer {
+                        id = POM_DEVELOPER_ID
+                        name = POM_DEVELOPER_NAME
+                    }
+                }
+                scm {
+                    url = POM_SCM_URL
+                    connection = POM_SCM_CONNECTION
+                    developerConnection = POM_SCM_DEV_CONNECTION
+                }
+            }
+        }
+    }
+}
+
+registry {
+    sdkName = project.ext.mapboxRegistrySdkName
+    production = true
+    snapshot = project.ext.versionName.endsWith("-SNAPSHOT")
+    override = snapshot ? true : false
+    dryRun = false
+    publish = true
+    publications = ['mavenJava']
+}

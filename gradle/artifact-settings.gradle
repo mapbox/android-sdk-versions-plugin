@@ -1,0 +1,15 @@
+ext {
+    mapboxArtifactGroupId = 'com.mapbox.mapboxsdk'
+    mapboxArtifactId = project.property('POM_ARTIFACT_ID')
+    mapboxArtifactTitle = project.property('POM_ARTIFACT_TITLE')
+    mapboxArtifactDescription = project.property('POM_DESCRIPTION')
+    mapboxDeveloperName = 'Mapbox'
+    mapboxDeveloperId = 'mapbox'
+    mapboxArtifactUrl = 'https://github.com/mapbox/android-sdk-versions-plugin'
+    mapboxArtifactVcsUrl = 'https://github.com/mapbox/android-sdk-versions-plugin.git'
+    mapboxArtifactScmUrl = 'scm:git@github.com:mapbox/android-sdk-versions-plugin.git'
+    mapboxArtifactLicenseName = 'MIT'
+    mapboxArtifactLicenseUrl = 'https://mit-license.org'
+    versionName = project.property('VERSION_NAME')
+    mapboxRegistrySdkName = project.hasProperty('SDK_REGISTRY_NAME') ? project.property('SDK_REGISTRY_NAME') : System.getenv('SDK_REGISTRY_NAME')
+}

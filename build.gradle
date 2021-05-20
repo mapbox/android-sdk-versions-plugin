@@ -1,3 +1,28 @@
+buildscript {
+    repositories {
+        google()
+        jcenter()
+        maven {
+            url 'https://api.mapbox.com/downloads/v2/releases/maven'
+            authentication {
+                basic(BasicAuthentication)
+            }
+            credentials {
+                username = "mapbox"
+                password = project.hasProperty('SDK_REGISTRY_TOKEN') ? project.property('SDK_REGISTRY_TOKEN') : System.getenv('SDK_REGISTRY_TOKEN')
+            }
+        }
+    }
+
+    dependencies {
+        apply from: "${rootDir}/gradle/dependencies.gradle"
+
+        if (SDK_REGISTRY == 'true') {
+            classpath pluginDependencies.mapboxSdkRegistry
+        }
+    }
+}
+
 plugins {
     id 'groovy'
     id 'jacoco'
@@ -37,6 +62,7 @@ dependencies {
 apply from: "${rootDir}/gradle/mvn-push-plugin.gradle"
 apply from: "${rootDir}/gradle/checkstyle.gradle"
 apply from: "${rootDir}/gradle/codenarc.gradle"
+apply from: "${rootDir}/gradle/sdk-registry.gradle"
 
 afterEvaluate {
     tasks.findByName('check').dependsOn('checkstyle')
