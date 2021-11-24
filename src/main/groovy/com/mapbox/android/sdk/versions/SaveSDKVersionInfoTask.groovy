@@ -1,6 +1,8 @@
 package com.mapbox.android.sdk.versions
 
 import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
@@ -29,16 +31,20 @@ class SaveSDKVersionInfoTask extends DefaultTask {
     /**
      * SDK version set to this task.
      */
+    @Input
     String sdkVersion
 
     /**
      * SDK name set to this task.
      */
+    @Input
     String sdkName
 
     /**
      * SDK version code set to this task.
      */
+    @Input
+    @Optional
     Integer sdkVersionCode
 
     @TaskAction
