@@ -1,5 +1,9 @@
 # Changelog for Android SDK Versions Plugin
 
+## V1.1.2
+
+- specify inputs for save sdk version info task [#37](https://github.com/mapbox/android-sdk-versions-plugin/pull/37)
+
 ## V1.1.1
 
 - Fix for fetching `versionCode` to allow integration with gradle 4.1.0. [#30](https://github.com/mapbox/android-sdk-versions-plugin/pull/30)
