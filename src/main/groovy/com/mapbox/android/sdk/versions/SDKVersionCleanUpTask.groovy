@@ -1,7 +1,7 @@
 package com.mapbox.android.sdk.versions
 
 import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 
 /**
@@ -12,8 +12,8 @@ class SDKVersionCleanUpTask extends DefaultTask {
     /**
      * Output directory set to this task.
      */
-    @Input
-    public File outputDir
+    @OutputDirectory
+    File outputDir
 
     @TaskAction
     void action() {
