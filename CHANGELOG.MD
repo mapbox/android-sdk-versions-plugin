@@ -1,5 +1,9 @@
 # Changelog for Android SDK Versions Plugin
 
+## V1.1.3
+
+- fixed outputDir property of clean up task [#39](https://github.com/mapbox/android-sdk-versions-plugin/pull/39)
+
 ## V1.1.2
 
 - specify inputs for save sdk version info task [#37](https://github.com/mapbox/android-sdk-versions-plugin/pull/37)
