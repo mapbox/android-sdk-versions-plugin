@@ -1,5 +1,9 @@
 # Changelog for Android SDK Versions Plugin
 
+## V1.1.4
+
+- made package assets and merge assets tasks depend on save sdk version task [#44](https://github.com/mapbox/android-sdk-versions-plugin/pull/44)
+
 ## V1.1.3
 
 - fixed outputDir property of clean up task [#39](https://github.com/mapbox/android-sdk-versions-plugin/pull/39)
