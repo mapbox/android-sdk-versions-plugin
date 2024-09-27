@@ -63,6 +63,12 @@ class PersistSDKVersionInfo implements Plugin<Project> {
         def cleanupTask = project.tasks.create("cleanSDKVersions", SDKVersionCleanUpTask)
         cleanupTask.outputDir = sdkVersionsDir
         project.tasks.findByName("clean").dependsOn(cleanupTask)
+
+        project.tasks.matching {
+            (it.name.startsWith("package") || it.name.startsWith("merge")) && it.name.endsWith("Assets")
+        }.configureEach {
+            dependsOn saveSDKVersionTask
+        }
     }
 
     /**
