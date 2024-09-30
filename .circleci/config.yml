@@ -81,16 +81,6 @@ jobs:
                 echo "export AWS_SDK_LOAD_CONFIG=1" >> $BASH_ENV
                 ./mbx-ci aws setup
       - run:
-          name: Generate Maven credentials
-          shell: /bin/bash -euo pipefail
-          command: |
-            aws s3 cp s3://mapbox/android/signing-credentials/secring.gpg secring.gpg
-            echo "NEXUS_USERNAME=$PUBLISH_NEXUS_USERNAME
-            NEXUS_PASSWORD=$PUBLISH_NEXUS_PASSWORD
-            signing.keyId=$SIGNING_KEYID
-            signing.password=$SIGNING_PASSWORD
-            signing.secretKeyRingFile=./secring.gpg" >> gradle.properties
-      - run:
           name: Update version name
           command: |
             if [[ $CIRCLE_TAG == sdkver-* ]]; then
@@ -100,10 +90,9 @@ jobs:
           name: Build plugin
           command: make release
       - deploy:
-          name: Publish to Maven Central and Mapbox SDK registry
+          name: Upload to Mapbox SDK registry
           command: |
-              make publish;
-              make publish-sdk-registry;
+            make upload-sdk-registry;
       - store_artifacts:
           path: build/libs
           destination: reports

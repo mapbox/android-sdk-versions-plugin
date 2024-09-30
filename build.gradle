@@ -59,7 +59,6 @@ dependencies {
     implementation gradleApi()
 }
 
-apply from: "${rootDir}/gradle/mvn-push-plugin.gradle"
 apply from: "${rootDir}/gradle/checkstyle.gradle"
 apply from: "${rootDir}/gradle/codenarc.gradle"
 apply from: "${rootDir}/gradle/sdk-registry.gradle"

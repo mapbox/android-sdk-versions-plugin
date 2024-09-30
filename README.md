@@ -23,6 +23,16 @@ all Mapbox library versions at run time.
 In your root-level build.gradle, make sure you are using the Maven Central Repository and 
 add android-sdk-versions-plugin to your dependencies
 ```$xslt
+   maven {
+       url 'https://api.mapbox.com/downloads/v2/releases/maven'
+       authentication {
+           basic(BasicAuthentication)
+       }
+       credentials {
+           username = "mapbox"
+           password = project.hasProperty('SDK_REGISTRY_TOKEN') ? project.property('SDK_REGISTRY_TOKEN') : System.getenv('SDK_REGISTRY_TOKEN')
+       }
+   }   
 
   dependencies {
     // ...
@@ -58,9 +68,17 @@ release yet, you can use a -SNAPSHOT release of the current development version,
 
 ```$xslt
 
-    repositories {
-        mavenCentral()
-        maven { url "http://oss.sonatype.org/content/repositories/snapshots/" }
+    repositories { 
+        maven {
+            url 'https://api.mapbox.com/downloads/v2/snapshots/maven'
+            authentication {
+                basic(BasicAuthentication)
+            }
+            credentials {
+                username = "mapbox"
+                password = project.hasProperty('SDK_REGISTRY_TOKEN') ? project.property('SDK_REGISTRY_TOKEN') : System.getenv('SDK_REGISTRY_TOKEN')
+            }
+        }
     }
 
   dependencies {
